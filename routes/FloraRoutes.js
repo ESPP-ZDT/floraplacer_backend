@@ -6,15 +6,15 @@ const router = express.Router();
 router.route('/api/flora').post(addFlora);
 
 // Get All Flora
-//router.route('/api/flora').get(getFlora);
+router.route('/api/flora').get(getFlora);
 
 // Get Flora by ID
-router.get('/api/flora/:id', getFloraById);
+router.route('/api/flora/:id').get(getFloraById);
 
 // Update Flora
-router.put('/api/flora/:id', updateFlora);
+router.route('/api/flora/:id').put(updateFlora);
 
 // Delete Flora
-router.delete('/api/flora/:id', deleteFlora);
+router.route('/api/flora/:id').delete(deleteFlora);
 
 module.exports = router;

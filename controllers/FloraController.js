@@ -23,28 +23,44 @@ const addFlora = asyncHandler(async (req, res) => {
   }
 });
 
-const getFlora = (req, res) => {
-    Flora.find()
-    .then(flora => res.json(flora))
-    .catch(err => res.status(400).json({ success: false, error: err }));
-};
+const getFlora = asyncHandler(async (req, res) => {
+    try {
+      const flora = await Flora.find();
+      res.json(flora);
+    } catch (err) {
+      res.status(400).json({ success: false, error: err });
+    }
+  });
 
-const getFloraById = (req, res) => {
-    Flora.findById(req.params.id)
-    .then(flora => res.json(flora))
-    .catch(err => res.status(400).json({ success: false, error: err }));
-};
+  const getFloraById = asyncHandler(async (req, res) => {
+    const flora = await Flora.findById(req.params.id);
+    if (!flora) {
+        res.status(404);
+        throw new Error("Flora not found");
+        return;
+    }
+    res.json(flora);
+});
 
-const updateFlora = (req, res) => {
-    Flora.findByIdAndUpdate(req.params.id, req.body, {new: true})
-    .then(flora => res.json(flora))
-    .catch(err => res.status(400).json({ success: false, error: err }));
-};
+const updateFlora = asyncHandler(async (req, res) => {
+    const flora = await Flora.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!flora) {
+        res.status(404);
+        throw new Error("Flora not found");
+        return;
+    }
+    res.json(flora);
+});
 
-const deleteFlora = (req, res) => {
-    Flora.findByIdAndRemove(req.params.id)
-    .then(() => res.json({success: true}))
-    .catch(err => res.status(400).json({ success: false, error: err }));
-};
+const deleteFlora = asyncHandler(async (req, res) => {
+    const flora = await Flora.findByIdAndRemove(req.params.id);
+    if (!flora) {
+        res.status(404);
+        throw new Error("Flora not found");
+        return;
+    }
+    res.json({ success: true });
+});
+
 
 module.exports ={addFlora, getFlora, getFloraById, updateFlora, deleteFlora}
